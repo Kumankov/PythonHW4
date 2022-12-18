@@ -4,43 +4,40 @@
 # Список людей и друзей в каждой строке требуется 
 # вывести в алфавитном порядке без повторений.
 
-
 with open("input3.txt", encoding="utf-8") as inputFile:
     inputList = [row.strip() for row in inputFile]
 connectionList=[[]]*len(inputList)
-for i in range(len(connectionList)):
+for i in range(len(connectionList)): # создаем список связей
     connectionList[i]=inputList[i].split()
 peopleList=[]
-for j in range(len(connectionList)):
+for j in range(len(connectionList)): #создаем список людей
     if connectionList[j][0] not in peopleList:    
         peopleList.append(connectionList[j][0])
 for k in range(len(connectionList)):
     if connectionList[k][1] not in peopleList:    
         peopleList.append(connectionList[k][1])
-# print(peopleList)
-peopConList=[]
+peopConList=[] # список людей со свсеми связями первого уровня
 tempPeopConList=[]
 for l in range(len(peopleList)):
     tempPeopConList.append(peopleList[l])
     for m in range(len(connectionList)):       
-        if peopleList[l]==connectionList[m][0] and connectionList[m][1] not in tempPeopConList:
+        if peopleList[l]==connectionList[m][0] and connectionList[m][1] not in tempPeopConList: #проверяем связь слева направо
             tempPeopConList.append(connectionList[m][1])
-        elif peopleList[l]==connectionList[m][1] and connectionList[m][0] not in tempPeopConList:
+        elif peopleList[l]==connectionList[m][1] and connectionList[m][0] not in tempPeopConList: #проверяем связь справа налево 
             tempPeopConList.append(connectionList[m][0])
     peopConList.append(tempPeopConList)
     tempPeopConList=[]
-print(peopConList)    
-peopSecConList=[]
+peopSecConList=[] #создаем список связей второго уровня
 for n in range(len(peopleList)):
     for o in range(1,len(peopConList[n])):
         for p in range(len(peopConList)):
             if peopConList[n][o] == peopConList[p][0]:
                 for q in range(1,len(peopConList[p])):
-                    if peopConList[p][q] not in tempPeopConList and peopConList[p][q] != peopleList[n]:
+                    if peopConList[p][q] not in tempPeopConList and peopConList[p][q] != peopleList[n] and peopConList[p][q] not in peopConList[n]:
                         tempPeopConList.append(peopConList[p][q])                
     peopSecConList.append(tempPeopConList)
     tempPeopConList=[] 
-for r in range(len(peopSecConList)):
+for r in range(len(peopSecConList)): #сортируем связи по алфавиту
     peopSecConList[r].sort()
 result =[]
 tempstr =''
